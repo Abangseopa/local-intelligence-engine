@@ -4,3 +4,6 @@
 
 # Step 3 (local embeddings): runs the sentence-transformers model locally on CPU.
 sentence-transformers>=6.0.0
+
+# Step 4 (semantic retrieval): explicit cosine-similarity math over stored vectors.
+numpy>=2.0.0

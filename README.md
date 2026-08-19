@@ -94,7 +94,38 @@ python3 src/retrieval/embed.py
 Requires `sentence-transformers` (see `requirements.txt`); no vector database
 is used yet — embeddings are stored as plain JSON.
 
+### 3. Semantic retrieval (`src/retrieval/search.py`)
+
+Ranks stored chunks by how semantically similar they are to a query:
+
+```
+query text → same embedding model as Step 3 → query vector
+           → cosine similarity vs. every stored chunk vector (NumPy)
+           → ranked results → top-k
+```
+
+- Loads `data/processed/embeddings.json` and reads the model name stored
+  inside it, so the query is always embedded with the exact same model used
+  for the chunks (required for the vectors to be comparable at all).
+- Embeds the query, then computes cosine similarity between the query vector
+  and every chunk vector directly with NumPy (`(a · b) / (|a| |b|)`) — no
+  FAISS or vector database yet, since the dataset is small enough to compare
+  against every vector and see the math explicitly.
+- Sorts chunks by similarity score (descending) and returns the top-k, each
+  with `rank`, `similarity_score`, `chunk_id`, `source_document`,
+  `chunk_index`, and `text`.
+
+Run the demo from the project root (after running ingestion and embedding):
+
+```
+python3 src/retrieval/search.py
+```
+
+The demo runs five queries against the example mining report, including one
+paraphrased question with little keyword overlap with the source text, to
+show that retrieval works on meaning rather than exact word matches.
+
 ## Status
 
-Ingestion, chunking, and local embeddings implemented (Step 3/8). Vector
-indexing, retrieval, generation, and evaluation are not yet implemented.
+Ingestion, chunking, local embeddings, and semantic retrieval implemented
+(Step 4/8). Generation and evaluation are not yet implemented.
