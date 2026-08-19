@@ -37,6 +37,32 @@ reports/         # Generated evaluation reports and outputs
 tests/           # Test suite
 ```
 
+## Pipeline stages
+
+### 1. Ingestion & chunking (`src/ingestion/ingest.py`)
+
+Turns raw documents into overlapping text chunks ready for embedding:
+
+```
+data/raw/*.txt → load → normalize whitespace → overlapping chunks → data/processed/chunks.json
+```
+
+- Loads every `.txt` file in `data/raw/`.
+- Normalizes basic whitespace (collapses repeated spaces/tabs and excess blank lines).
+- Splits each document into overlapping, word-based chunks (150 words per chunk,
+  30-word overlap between consecutive chunks).
+- Saves the result to `data/processed/chunks.json`, where each chunk record has:
+  `chunk_id`, `source_document`, `chunk_index`, `text`.
+
+Run it from the project root:
+
+```
+python3 src/ingestion/ingest.py
+```
+
+Standard library only — no external dependencies.
+
 ## Status
 
-Project scaffolding only. Pipeline stages are not yet implemented.
+Ingestion and chunking implemented (Step 2/8). Embeddings, indexing, retrieval,
+generation, and evaluation are not yet implemented.

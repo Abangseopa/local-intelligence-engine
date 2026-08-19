@@ -1,0 +1,63 @@
+Technical Report: Kestrel Ridge Lithium-Cobalt Project
+
+1. Overview
+
+The Kestrel Ridge Project is a critical-minerals mining operation located in the
+Whitlock Basin, approximately 42 kilometers northeast of the town of Amberfield.
+The site is operated by Northgate Resources under exploration permit WB-2291 and
+mining lease ML-7734, issued by the regional Department of Mines in March 2021.
+The project targets a combined lithium and cobalt deposit hosted in pegmatite
+intrusions, with construction completed in late 2023 and commercial production
+beginning in February 2024.
+
+2. Location and Geology
+
+The Kestrel Ridge deposit sits within a Precambrian pegmatite belt that also hosts
+tantalum and beryl mineralization. Drilling since 2019 has outlined a mineralized
+zone extending roughly 3.1 kilometers along strike and averaging 45 meters in
+width. The spodumene-bearing pegmatites are the primary lithium ore, while cobalt
+occurs as a secondary product within associated sulfide veins.
+
+3. Resource Estimates
+
+The measured and indicated resource is estimated at 58.4 million tonnes at an
+average grade of 1.24% lithium oxide (Li2O) and 0.09% cobalt. Proven reserves
+support a projected mine life of 19 years at current extraction rates. An
+independent audit conducted in September 2023 confirmed the resource estimate
+using the standard reporting code for mineral disclosures.
+
+4. Extraction and Processing
+
+Ore is extracted using open-pit bench mining with 10-meter benches. Run-of-mine
+ore is crushed, then concentrated through dense-media separation followed by
+froth flotation to produce a spodumene concentrate averaging 5.8% Li2O. The
+concentrate is trucked to a regional rail terminal 65 kilometers away for export.
+Cobalt-bearing sulfides are recovered separately through a flotation circuit
+installed in the second phase of the processing plant, commissioned in June 2024.
+
+5. Environmental Safeguards
+
+The site employs a dry-stack tailings storage facility rather than a conventional
+tailings dam, reducing water usage and eliminating the risk of dam failure. Process
+water is recycled at a rate of 87%, drawn primarily from a closed-loop circuit fed
+by an on-site water treatment plant. A 2023 environmental impact assessment
+identified the greater sage grouse as a species of concern, and a 1,200-hectare
+offset habitat area has been established 8 kilometers south of the pit.
+
+6. Workforce and Safety
+
+The operation employs 340 full-time workers, of whom 61% reside in Amberfield or
+surrounding communities. The site reported a lost-time injury frequency rate
+(LTIFR) of 0.9 per million hours worked in 2024, below the industry benchmark of
+1.6. All workers complete a mandatory five-day safety induction before entering
+active mining areas.
+
+7. Production Timeline and Outlook
+
+Commercial production began in February 2024 with an initial output target of
+180,000 tonnes of spodumene concentrate per year, ramping to a planned 260,000
+tonnes per year by 2026 following completion of the second processing line.
+Cobalt by-product output is forecast at 1,450 tonnes per year once the sulfide
+flotation circuit reaches full capacity. Northgate Resources has stated that a
+feasibility study for a downstream lithium hydroxide conversion facility near
+Amberfield is expected to be completed by late 2027.

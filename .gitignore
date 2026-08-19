@@ -42,7 +42,11 @@ models/*
 *.onnx
 
 # --- Data and generated artifacts ---
+# Raw source documents (e.g. .txt) are tracked so the pipeline is runnable;
+# processed/generated outputs are not, since they're reproducible by running
+# the pipeline scripts.
 data/raw/*
+!data/raw/*.txt
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep

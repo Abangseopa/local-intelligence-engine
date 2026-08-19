@@ -1,1 +1,3 @@
 # Dependencies will be added incrementally as each pipeline stage is implemented.
+
+# Step 2 (ingestion/chunking): standard library only (pathlib, re, json) — no dependencies needed.
