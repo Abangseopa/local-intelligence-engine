@@ -62,7 +62,39 @@ python3 src/ingestion/ingest.py
 
 Standard library only — no external dependencies.
 
+### 2. Local embeddings (`src/retrieval/embed.py`)
+
+Turns each chunk's text into a numeric vector using a local, open-source
+sentence embedding model:
+
+```
+data/processed/chunks.json → embedding model → data/processed/embeddings.json
+```
+
+- Loads the chunk records produced by the ingestion stage.
+- Encodes each chunk's `text` with `all-MiniLM-L6-v2` (via `sentence-transformers`),
+  running entirely on-device — no API calls, no GPU required.
+- Saves one 384-dimensional vector per chunk to `data/processed/embeddings.json`,
+  alongside the model name and each chunk's `chunk_id`, `source_document`,
+  `chunk_index`, and original `text`, so every vector can be traced back to
+  its source.
+
+**Why `all-MiniLM-L6-v2`:** it's a small (~80MB), well-established
+sentence-transformers model that runs comfortably on CPU with no rented GPU,
+downloads quickly, and produces strong general-purpose semantic similarity
+results relative to its size — a good balance of speed, size, and quality for
+learning the mechanics of embedding-based retrieval.
+
+Run it from the project root (after running the ingestion stage):
+
+```
+python3 src/retrieval/embed.py
+```
+
+Requires `sentence-transformers` (see `requirements.txt`); no vector database
+is used yet — embeddings are stored as plain JSON.
+
 ## Status
 
-Ingestion and chunking implemented (Step 2/8). Embeddings, indexing, retrieval,
-generation, and evaluation are not yet implemented.
+Ingestion, chunking, and local embeddings implemented (Step 3/8). Vector
+indexing, retrieval, generation, and evaluation are not yet implemented.

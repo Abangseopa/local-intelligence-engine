@@ -1,3 +1,6 @@
 # Dependencies will be added incrementally as each pipeline stage is implemented.
 
 # Step 2 (ingestion/chunking): standard library only (pathlib, re, json) — no dependencies needed.
+
+# Step 3 (local embeddings): runs the sentence-transformers model locally on CPU.
+sentence-transformers>=6.0.0
