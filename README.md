@@ -125,7 +125,49 @@ The demo runs five queries against the example mining report, including one
 paraphrased question with little keyword overlap with the source text, to
 show that retrieval works on meaning rather than exact word matches.
 
+### 4. Grounded generation (`src/generation/generate.py`)
+
+Turns retrieved chunks into a grounded natural-language answer using a local,
+open-source instruction-tuned LLM:
+
+```
+question → Step 3 retrieval (top-k chunks) → build_prompt(question, chunks)
+         → Qwen2.5-1.5B-Instruct (local) → answer
+```
+
+- Reuses `src.retrieval.search` directly for retrieval — no retrieval logic
+  is duplicated here. This module only adds prompt construction and LLM
+  inference on top of it.
+- Builds a single prompt that instructs the model to answer using ONLY the
+  retrieved CONTEXT, and to say clearly that it doesn't know rather than
+  guess when the context doesn't contain the answer.
+- Generates the answer locally with `Qwen/Qwen2.5-1.5B-Instruct` (via
+  `transformers`), using greedy decoding for deterministic output. Runs on
+  Apple Silicon MPS if available, otherwise CPU.
+
+**Why `Qwen2.5-1.5B-Instruct`:** it's a small (~1.5B parameter, ~3GB)
+instruction-tuned model released under Apache-2.0, ungated on Hugging Face,
+with strong instruction-following for its size, and runs comfortably on an
+Apple Silicon Mac (CPU or MPS) without a rented GPU.
+
+Run the demo from the project root (after running ingestion, embedding, and
+retrieval are available, i.e. `data/processed/embeddings.json` exists):
+
+```
+python3 src/generation/generate.py
+```
+
+The demo runs four questions against the example mining report: two directly
+answerable from the retrieved evidence, one paraphrased question, and one
+whose answer is deliberately absent from the source document — to confirm
+the model declines to answer rather than hallucinating when the context
+doesn't support an answer.
+
+Requires `torch` and `transformers` (see `requirements.txt`); the model
+weights are downloaded once from Hugging Face and cached locally
+(`~/.cache/huggingface/hub`) on first run.
+
 ## Status
 
-Ingestion, chunking, local embeddings, and semantic retrieval implemented
-(Step 4/8). Generation and evaluation are not yet implemented.
+Ingestion, chunking, local embeddings, semantic retrieval, and grounded
+generation implemented (Step 5/8). Evaluation is not yet implemented.

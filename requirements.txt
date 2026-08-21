@@ -7,3 +7,7 @@ sentence-transformers>=6.0.0
 
 # Step 4 (semantic retrieval): explicit cosine-similarity math over stored vectors.
 numpy>=2.0.0
+
+# Step 5 (grounded generation): runs Qwen2.5-1.5B-Instruct locally for answer generation.
+torch>=2.13.0
+transformers>=5.15.1
