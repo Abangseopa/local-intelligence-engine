@@ -32,6 +32,7 @@ src/
     retrieval/   # Embedding generation, vector index, semantic search
     generation/  # Open-source LLM integration for grounded answers
     evaluation/  # Pipeline evaluation and metrics
+    interface/   # End-to-end ask() entry point / command-line interface
 models/          # Local model weights/files
 reports/         # Generated evaluation reports and outputs
 tests/           # Test suite
@@ -214,7 +215,52 @@ full report to `reports/evaluation_report.md` (human-readable, with every
 question's expected vs. retrieved evidence and expected vs. generated
 answer) and `reports/evaluation_results.json` (the same data, structured).
 
+### 6. End-to-end interface (`src/interface/ask.py`)
+
+A single `ask()` entry point that turns Steps 1–6 into one usable pipeline,
+without reimplementing any of it:
+
+```
+ask(question)
+    → Step 5's answer_question() [unchanged]
+        → Step 4's search(): embed_query() + cosine similarity → top-k chunks
+        → Step 5's build_prompt(): retrieved chunks → prompt
+        → Step 5's local Qwen2.5-1.5B-Instruct → grounded answer
+    → {question, answer, source_chunk_ids}
+```
+
+- Calls `answer_question()` from Step 5 directly — the same function used by
+  Step 5's demo and Step 6's evaluation — so this layer adds zero new
+  retrieval, prompting, or generation logic. It's pure orchestration plus
+  one bit of resource management: the embedding model and Qwen are loaded
+  once per process and reused across calls, since reloading them per
+  question would make interactive use unusably slow.
+- Every result includes `source_chunk_ids`, so an answer is never just
+  text — it's always traceable back to the exact chunk(s) that grounded it.
+
+Programmatic use:
+
+```python
+from src.interface.ask import ask
+result = ask("What concentrate grade is produced?")
+# {"question": ..., "answer": ..., "source_chunk_ids": [...]}
+```
+
+Command-line use, from the project root (after ingestion, embedding, and
+retrieval have been run):
+
+```
+python3 src/interface/ask.py "What concentrate grade is produced?"   # one-shot
+python3 src/interface/ask.py                                          # interactive loop
+```
+
+Each invocation prints the question, the grounded answer, and the source
+chunk IDs used as evidence. This is intentionally a plain local CLI — no web
+frontend, API server, database, or framework — consistent with the rest of
+the project's emphasis on seeing every stage of the pipeline directly.
+
 ## Status
 
 Ingestion, chunking, local embeddings, semantic retrieval, grounded
-generation, and evaluation implemented (Step 6/8).
+generation, evaluation, and an end-to-end ask() interface implemented
+(Step 7/8).
