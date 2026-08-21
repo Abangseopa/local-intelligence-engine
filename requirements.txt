@@ -11,3 +11,6 @@ numpy>=2.0.0
 # Step 5 (grounded generation): runs Qwen2.5-1.5B-Instruct locally for answer generation.
 torch>=2.13.0
 transformers>=5.15.1
+
+# Step 8 (test suite): runs tests/.
+pytest>=9.1.1
