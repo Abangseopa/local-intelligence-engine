@@ -167,7 +167,54 @@ Requires `torch` and `transformers` (see `requirements.txt`); the model
 weights are downloaded once from Hugging Face and cached locally
 (`~/.cache/huggingface/hub`) on first run.
 
+### 5. Evaluation (`src/evaluation/`)
+
+Scores retrieval and generation **separately**, rather than only checking
+whether the final answer looks right. A RAG system can fail two independent
+ways — the wrong evidence gets retrieved, or the right evidence gets
+retrieved but the LLM uses it badly — and those two failure modes call for
+different fixes, so this stage keeps them visible as two different numbers.
+
+```
+EVAL_QUESTIONS (src/evaluation/dataset.py)
+    → Step 5 answer_question() per question (reuses Steps 4 + 5 directly)
+    → evaluate_retrieval(): did an expected chunk land in the top-k?
+    → evaluate_generation(): does the answer contain the expected facts
+      (or correctly decline, for unanswerable questions)?
+    → reports/evaluation_report.md + reports/evaluation_results.json
+```
+
+- **`dataset.py`** — a small, explicit, hand-checked evaluation set built
+  only from `kestrel_ridge_report.txt`: answerable questions, one
+  paraphrased question, and two deliberately unanswerable questions. Each
+  entry records `expected_chunk_ids` (which chunk(s) should be retrieved)
+  and `expected_key_facts` (substrings a correct answer must contain).
+- **`evaluate.py`** — reuses `answer_question()` from Step 5 (which itself
+  calls Step 4's `search()`) for every question, with no retrieval,
+  prompt-building, or generation logic duplicated. Its two outputs are then
+  graded independently:
+  - **Retrieval:** Recall@k — pass if any `expected_chunk_ids` entry appears
+    in the retrieved top-k. Unanswerable questions have no expected
+    evidence and are excluded from this score.
+  - **Generation:** pass if every `expected_key_facts` substring appears in
+    the answer (answerable/paraphrase), or if the answer contains a
+    decline phrase such as "don't know" / "cannot determine" instead of
+    inventing an answer (unanswerable). This check is a fixed keyword list,
+    not a second LLM acting as a judge — deterministic and reproducible.
+
+Run it from the project root (after ingestion, embedding, and retrieval have
+been run):
+
+```
+python3 src/evaluation/evaluate.py
+```
+
+Prints a pass/fail line per question plus aggregate scores, and writes a
+full report to `reports/evaluation_report.md` (human-readable, with every
+question's expected vs. retrieved evidence and expected vs. generated
+answer) and `reports/evaluation_results.json` (the same data, structured).
+
 ## Status
 
-Ingestion, chunking, local embeddings, semantic retrieval, and grounded
-generation implemented (Step 5/8). Evaluation is not yet implemented.
+Ingestion, chunking, local embeddings, semantic retrieval, grounded
+generation, and evaluation implemented (Step 6/8).
